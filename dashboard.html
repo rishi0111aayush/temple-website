@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard · Kuwee Wale Baba Ji</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,700&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:    #0F0700;
+  --bg2:   #160A00;
+  --bg3:   #1E0D00;
+  --panel: #2A1200;
+  --panel2:#321600;
+  --border:rgba(212,168,67,.12);
+  --saf:   #FF6B00;
+  --gold:  #D4AF37;
+  --rose:  #8B1A1A;
+  --text:  #FDF5E6;
+  --muted: #A08060;
+  --dim:   rgba(253,245,230,.55);
+  --green: #2ECC71;
+  --blue:  #3498DB;
+  --sidebar:200px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-weight:300;display:flex;overflow:hidden;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100vh;overflow:hidden;
+  position:relative;
+}
+.sb-logo{
+  padding:1.5rem 1.2rem 1.2rem;
+  border-bottom:1px solid var(--border);
+}
+.sb-logo-mark{
+  width:36px;height:36px;border-radius:8px;
+  background:linear-gradient(135deg,var(--rose),var(--saf));
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  margin-bottom:.6rem;
+}
+.sb-logo-title{font-family:'Fraunces',serif;font-size:.9rem;font-weight:700;color:var(--text);line-height:1.3;}
+.sb-logo-sub{font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+
+.sb-nav{flex:1;padding:1rem 0;overflow-y:auto;}
+.sb-section{font-size:.55rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.18);padding:.8rem 1.2rem .4rem;}
+.sb-item{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.7rem 1.2rem;cursor:pointer;
+  font-size:.78rem;color:var(--muted);
+  transition:background .15s,color .15s;
+  border-left:2px solid transparent;
+  user-select:none;
+}
+.sb-item:hover{background:rgba(255,255,255,.03);color:var(--text);}
+.sb-item.active{
+  background:rgba(255,107,0,.08);color:var(--saf);
+  border-left-color:var(--saf);
+}
+.sb-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
+.sb-badge{
+  margin-left:auto;background:var(--saf);color:#fff;
+  font-size:.55rem;font-weight:600;padding:.15rem .45rem;border-radius:100px;
+}
+
+.sb-footer{
+  padding:1rem 1.2rem;border-top:1px solid var(--border);
+  font-size:.7rem;color:var(--muted);
+}
+.sb-site-link{
+  display:flex;align-items:center;gap:.5rem;color:var(--gold);
+  text-decoration:none;font-size:.72rem;margin-bottom:.5rem;
+  transition:opacity .2s;
+}
+.sb-site-link:hover{opacity:.75;}
+
+/* ── MAIN ── */
+.main{flex:1;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+
+/* TOP BAR */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(15,7,0,.9);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:.9rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;font-style:italic;color:var(--text);}
+.topbar-right{display:flex;align-items:center;gap:1rem;}
+.topbar-date{font-size:.72rem;color:var(--muted);}
+.topbar-admin{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.35rem .9rem;border-radius:100px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  font-size:.72rem;color:var(--text);
+}
+
+/* PAGE BODY */
+.page{display:none;padding:2rem;flex-direction:column;gap:2rem;}
+.page.active{display:flex;}
+
+/* ── STATS CARDS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.stat-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;
+  padding:1.5rem 1.6rem;position:relative;overflow:hidden;
+  transition:transform .2s,border-color .2s;
+}
+.stat-card:hover{transform:translateY(-3px);}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--sc,var(--saf));
+}
+.stat-icon{font-size:1.6rem;margin-bottom:.8rem;}
+.stat-label{font-size:.6rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem;}
+.stat-value{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;color:var(--text);line-height:1;}
+.stat-sub{font-size:.7rem;color:var(--muted);margin-top:.4rem;}
+.stat-trend{
+  position:absolute;top:1.2rem;right:1.2rem;
+  font-size:.65rem;padding:.2rem .55rem;border-radius:100px;
+  background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.2);
+}
+.stat-trend.down{background:rgba(231,76,60,.1);color:#e74c3c;border-color:rgba(231,76,60,.2);}
+
+/* ── VISITOR CHART ── */
+.chart-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:1.8rem;
+}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.card-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;font-style:italic;color:var(--text);}
+.card-sub{font-size:.72rem;color:var(--muted);margin-top:.15rem;}
+.chart-wrap{height:180px;display:flex;align-items:flex-end;gap:6px;padding-top:1rem;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;}
+.bar{
+  width:100%;border-radius:4px 4px 0 0;
+  background:linear-gradient(to top,rgba(255,107,0,.6),rgba(212,175,55,.4));
+  transition:height .6s cubic-bezier(.25,.46,.45,.94);min-height:4px;
+  position:relative;cursor:pointer;
+}
+.bar:hover{background:linear-gradient(to top,var(--saf),var(--gold));}
+.bar-label{font-size:.55rem;color:var(--muted);letter-spacing:.05em;}
+.bar-val{font-size:.6rem;color:var(--saf);font-weight:500;}
+.chart-empty{
+  width:100%;text-align:center;color:var(--muted);font-size:.82rem;
+  padding:2rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+
+/* ── PHOTO UPLOAD ── */
+.upload-zone{
+  border:2px dashed rgba(212,175,55,.25);border-radius:14px;
+  padding:3rem 2rem;text-align:center;cursor:pointer;
+  background:rgba(212,175,55,.03);
+  transition:border-color .2s,background .2s;
+  position:relative;
+}
+.upload-zone:hover,.upload-zone.drag{
+  border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.07);
+}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-icon{font-size:2.5rem;margin-bottom:.8rem;opacity:.6;}
+.upload-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--text);margin-bottom:.4rem;}
+.upload-hint{font-size:.78rem;color:var(--muted);}
+.upload-hint strong{color:var(--gold);}
+
+/* Upload progress */
+.upload-progress{
+  display:none;margin-top:1rem;
+  background:rgba(255,255,255,.05);border-radius:100px;height:6px;overflow:hidden;
+}
+.upload-bar{height:100%;background:linear-gradient(90deg,var(--saf),var(--gold));border-radius:100px;width:0;transition:width .3s;}
+
+/* ── PHOTO GRID ── */
+.photos-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;}
+.photos-count{font-size:.78rem;color:var(--muted);}
+.photos-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem;
+}
+.photo-item{
+  position:relative;border-radius:10px;overflow:hidden;
+  aspect-ratio:1;background:var(--panel2);border:1px solid var(--border);
+  cursor:pointer;
+}
+.photo-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.photo-item:hover img{transform:scale(1.06);}
+.photo-over{
+  position:absolute;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  opacity:0;transition:opacity .2s;
+}
+.photo-item:hover .photo-over{opacity:1;}
+.photo-btn{
+  width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;
+  transition:transform .15s;
+}
+.photo-btn:hover{transform:scale(1.15);}
+.pb-view{background:rgba(212,175,55,.9);}
+.pb-del{background:rgba(139,26,26,.9);}
+.photo-date{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.7));
+  padding:.4rem .5rem .35rem;font-size:.55rem;color:rgba(255,255,255,.6);
+}
+
+/* Empty state */
+.empty-photos{
+  grid-column:1/-1;text-align:center;padding:4rem 2rem;
+  color:var(--muted);font-size:.85rem;
+}
+.empty-photos .big{font-size:3rem;margin-bottom:.8rem;opacity:.3;}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;gap:.5rem;}
+.toast{
+  background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+  padding:.8rem 1.2rem;font-size:.78rem;color:var(--text);
+  display:flex;align-items:center;gap:.6rem;
+  animation:slideIn .25s ease;box-shadow:0 8px 24px rgba(0,0,0,.4);
+  min-width:220px;
+}
+.toast.success{border-color:rgba(46,204,113,.3);}
+.toast.error{border-color:rgba(231,76,60,.3);}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:none;}}
+
+/* ── LIGHTBOX ── */
+.lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;
+  display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.lightbox.open{display:flex;}
+.lb-img{max-width:90vw;max-height:85vh;border-radius:12px;object-fit:contain;}
+.lb-close{
+  position:absolute;top:1.5rem;right:1.5rem;
+  width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);
+  border:none;color:var(--text);font-size:1.2rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.lb-close:hover{background:rgba(255,255,255,.2);}
+
+/* ── VISITORS PAGE ── */
+.visitors-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.visit-log{
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:1.5rem;
+  max-height:340px;overflow-y:auto;
+}
+.log-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.78rem;
+}
+.log-item:last-child{border-bottom:none;}
+.log-date{color:var(--muted);}
+.log-count{
+  padding:.18rem .6rem;border-radius:100px;
+  background:rgba(255,107,0,.12);color:var(--saf);font-size:.68rem;font-weight:500;
+}
+.reset-btn{
+  padding:.45rem 1.1rem;border-radius:8px;border:1px solid rgba(139,26,26,.4);
+  background:rgba(139,26,26,.12);color:#e88;font-size:.72rem;cursor:pointer;
+  transition:background .2s;
+}
+.reset-btn:hover{background:rgba(139,26,26,.25);}
+
+/* ── SECTION UTILITY ── */
+.section-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:1.8rem;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-mark">&#128509;</div>
+    <div class="sb-logo-title">Kuwee Wale Baba Ji</div>
+    <div class="sb-logo-sub">Admin Panel</div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-section">Main</div>
+    <div class="sb-item active" data-page="overview" onclick="showPage('overview',this)">
+      <span class="sb-icon">&#9732;</span> Overview
+    </div>
+
+    <div class="sb-section">Content</div>
+    <div class="sb-item" data-page="photos" onclick="showPage('photos',this)">
+      <span class="sb-icon">&#128247;</span> Photos
+      <span class="sb-badge" id="photoBadge">0</span>
+    </div>
+
+    <div class="sb-section">Analytics</div>
+    <div class="sb-item" data-page="visitors" onclick="showPage('visitors',this)">
+      <span class="sb-icon">&#128100;</span> Visitors
+    </div>
+  </nav>
+
+  <div class="sb-footer">
+    <a href="index.html" target="_blank" class="sb-site-link">&#8599; View Temple Site</a>
+    <div style="font-size:.62rem;color:rgba(255,255,255,.18);">v1.0 · Local Storage Mode</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="pageTitle">Overview</div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-date" id="todayDate"></span>
+      <div class="topbar-admin">&#128100; Admin</div>
+    </div>
+  </div>
+
+  <!-- ── OVERVIEW PAGE ── -->
+  <div class="page active" id="page-overview">
+
+    <div class="stats-grid">
+      <div class="stat-card" style="--sc:var(--saf)">
+        <div class="stat-trend" id="trendToday">+0 today</div>
+        <div class="stat-icon">&#128101;</div>
+        <div class="stat-label">Total Visitors</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-sub">All-time page visits</div>
+      </div>
+      <div class="stat-card" style="--sc:var(--gold)">
+        <div class="stat-trend" id="trendToday2">Today</div>
+        <div class="stat-icon">&#128197;</div>
+        <div class="stat-label">Today's Visits</div>
+        <div class="stat-value" id="statToday">0</div>
+        <div class="stat-sub">Since midnight</div>
+      </div>
+      <div class="stat-card" style="--sc:var(--green)">
+        <div class="stat-icon">&#128247;</div>
+        <div class="stat-label">Photos Uploaded</div>
+        <div class="stat-value" id="statPhotos">0</div>
+        <div class="stat-sub">In the gallery</div>
+      </div>
+      <div class="stat-card" style="--sc:var(--rose)">
+        <div class="stat-icon">&#128336;</div>
+        <div class="stat-label">Last Visit</div>
+        <div class="stat-value" style="font-size:1.1rem;padding-top:.4rem" id="statLast">—</div>
+        <div class="stat-sub">Most recent visit</div>
+      </div>
+    </div>
+
+    <!-- Visitor Chart -->
+    <div class="chart-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Visitor Activity</div>
+          <div class="card-sub">Last 7 days · visits per day</div>
+        </div>
+      </div>
+      <div class="chart-wrap" id="chartWrap">
+        <div class="chart-empty">
+          <div class="big">&#128200;</div>
+          <div>No visitor data yet. Share your temple site to start tracking.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Photos Preview -->
+    <div class="section-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Recent Photos</div>
+          <div class="card-sub">Last 6 uploaded</div>
+        </div>
+        <button onclick="showPage('photos',document.querySelector('[data-page=photos]'))" style="padding:.4rem 1rem;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);color:var(--gold);font-size:.72rem;border-radius:8px;cursor:pointer;">
+          Manage All &#8594;
+        </button>
+      </div>
+      <div class="photos-grid" id="recentGrid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))"></div>
+    </div>
+
+  </div>
+
+  <!-- ── PHOTOS PAGE ── -->
+  <div class="page" id="page-photos">
+
+    <div class="section-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Upload Temple Photos</div>
+          <div class="card-sub">Drag &amp; drop or click to select. JPG, PNG, WEBP supported.</div>
+        </div>
+      </div>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/*" multiple/>
+        <div class="upload-icon">&#128247;</div>
+        <div class="upload-title">Drop photos here</div>
+        <div class="upload-hint">or <strong>click to browse</strong> &nbsp;·&nbsp; Multiple files supported</div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-bar" id="uploadBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="photos-header">
+        <div class="card-title" style="font-style:italic;font-family:'Fraunces',serif;">Temple Gallery</div>
+        <div style="display:flex;align-items:center;gap:.8rem;">
+          <span class="photos-count" id="photosCount">0 photos</span>
+          <button class="reset-btn" onclick="clearPhotos()">Clear All</button>
+        </div>
+      </div>
+      <div class="photos-grid" id="photosGrid">
+        <div class="empty-photos">
+          <div class="big">&#128444;&#65039;</div>
+          <div>No photos yet. Upload some above!</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── VISITORS PAGE ── -->
+  <div class="page" id="page-visitors">
+
+    <div class="stats-grid">
+      <div class="stat-card" style="--sc:var(--saf)">
+        <div class="stat-icon">&#128101;</div>
+        <div class="stat-label">Total Visitors</div>
+        <div class="stat-value" id="v-total">0</div>
+        <div class="stat-sub">Cumulative visits</div>
+      </div>
+      <div class="stat-card" style="--sc:var(--gold)">
+        <div class="stat-icon">&#128197;</div>
+        <div class="stat-label">Today</div>
+        <div class="stat-value" id="v-today">0</div>
+        <div class="stat-sub">Visits since midnight</div>
+      </div>
+      <div class="stat-card" style="--sc:var(--green)">
+        <div class="stat-icon">&#128200;</div>
+        <div class="stat-label">Active Days</div>
+        <div class="stat-value" id="v-days">0</div>
+        <div class="stat-sub">Days with visits</div>
+      </div>
+      <div class="stat-card" style="--sc:var(--blue)">
+        <div class="stat-icon">&#127942;</div>
+        <div class="stat-label">Peak Day</div>
+        <div class="stat-value" style="font-size:1rem;padding-top:.5rem" id="v-peak">—</div>
+        <div class="stat-sub">Highest single-day visits</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Visits — Last 14 Days</div>
+          <div class="card-sub">Daily visit count from the temple website</div>
+        </div>
+        <button class="reset-btn" onclick="resetVisitors()">Reset Data</button>
+      </div>
+      <div class="chart-wrap" id="chartWrap2" style="height:200px;"></div>
+    </div>
+
+    <div class="visitors-grid">
+      <div class="section-card">
+        <div class="card-title" style="font-family:'Fraunces',serif;font-style:italic;margin-bottom:1.2rem;">Daily Visit Log</div>
+        <div class="visit-log" id="visitLog">
+          <div style="color:var(--muted);font-size:.8rem;text-align:center;padding:2rem;">No visits recorded yet.</div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="card-title" style="font-family:'Fraunces',serif;font-style:italic;margin-bottom:1rem;">How Visitor Tracking Works</div>
+        <div style="font-size:.8rem;color:var(--dim);line-height:1.9;">
+          <p style="margin-bottom:.8rem;">Every time someone opens the <strong style="color:var(--gold)">temple website</strong> (index.html), a visit is automatically recorded here.</p>
+          <p style="margin-bottom:.8rem;">Visits are stored locally in the browser. To track visitors across different devices and the internet, you will need <strong style="color:var(--saf)">web hosting</strong>.</p>
+          <p>For now, this dashboard works perfectly as a <strong style="color:var(--gold)">demo</strong> to show your boss the concept and layout.</p>
+        </div>
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(255,107,0,.07);border:1px solid rgba(255,107,0,.2);border-radius:8px;font-size:.75rem;color:var(--dim);line-height:1.7;">
+          <strong style="color:var(--saf);">Tip:</strong> Open the temple site in a new tab a few times to see the visitor count go up here.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /main -->
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">&#10005;</button>
+  <img class="lb-img" id="lbImg" src="" alt=""/>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+/* ── DATA ── */
+const STORAGE_PHOTOS   = 'kwbj_photos';
+const STORAGE_VISITORS = 'kwbj_visitors';
+
+function getPhotos(){ try{ return JSON.parse(localStorage.getItem(STORAGE_PHOTOS)||'[]'); }catch{return[];} }
+function savePhotos(p){ localStorage.setItem(STORAGE_PHOTOS,JSON.stringify(p)); }
+function getVisitors(){ try{ return JSON.parse(localStorage.getItem(STORAGE_VISITORS)||'{}'); }catch{return{};} }
+function saveVisitors(v){ localStorage.setItem(STORAGE_VISITORS,JSON.stringify(v)); }
+
+function todayKey(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+  refreshAll();
+  setupUpload();
+});
+
+function refreshAll(){
+  refreshStats();
+  refreshPhotosGrid();
+  refreshRecentGrid();
+  refreshChart();
+  refreshVisitorPage();
+  updateBadge();
+}
+
+/* ── NAVIGATION ── */
+function showPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  const titles={overview:'Overview',photos:'Photos',visitors:'Visitors'};
+  document.getElementById('pageTitle').textContent = titles[id]||id;
+  refreshAll();
+}
+
+/* ── STATS ── */
+function refreshStats(){
+  const visitors = getVisitors();
+  const photos = getPhotos();
+  const total = Object.values(visitors).reduce((a,b)=>a+b,0);
+  const today = visitors[todayKey()]||0;
+  const lastDate = Object.keys(visitors).sort().pop();
+
+  document.getElementById('statTotal').textContent = total.toLocaleString();
+  document.getElementById('statToday').textContent = today.toLocaleString();
+  document.getElementById('statPhotos').textContent = photos.length;
+  document.getElementById('statLast').textContent = lastDate ? fmtDate(lastDate) : '—';
+  document.getElementById('trendToday').textContent = '+'+today+' today';
+  if(document.getElementById('v-total')) document.getElementById('v-total').textContent=total.toLocaleString();
+  if(document.getElementById('v-today')) document.getElementById('v-today').textContent=today.toLocaleString();
+}
+
+function fmtDate(k){
+  const [y,m,d]=k.split('-');
+  return new Date(y,m-1,d).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+}
+
+/* ── CHART ── */
+function refreshChart(){
+  buildChart('chartWrap', 7);
+  buildChart('chartWrap2', 14);
+}
+
+function buildChart(id, days){
+  const wrap = document.getElementById(id);
+  if(!wrap) return;
+  const visitors = getVisitors();
+  const keys = [];
+  const now = new Date();
+  for(let i=days-1;i>=0;i--){
+    const d = new Date(now);
+    d.setDate(d.getDate()-i);
+    keys.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
+  }
+  const vals = keys.map(k=>visitors[k]||0);
+  const max  = Math.max(...vals,1);
+  const hasData = vals.some(v=>v>0);
+
+  if(!hasData){
+    wrap.innerHTML = '<div class="chart-empty"><div class="big">&#128200;</div><div>No visit data yet. Open the temple site to start tracking.</div></div>';
+    return;
+  }
+  wrap.innerHTML = vals.map((v,i)=>`
+    <div class="bar-col">
+      <div class="bar-val">${v||''}</div>
+      <div class="bar" style="height:${Math.max((v/max)*100,4)}%" title="${v} visits on ${fmtDate(keys[i])}"></div>
+      <div class="bar-label">${fmtDate(keys[i])}</div>
+    </div>
+  `).join('');
+}
+
+/* ── VISITOR PAGE ── */
+function refreshVisitorPage(){
+  const visitors = getVisitors();
+  const sorted = Object.entries(visitors).sort((a,b)=>b[0].localeCompare(a[0]));
+  const total = sorted.reduce((a,[,v])=>a+v,0);
+  const days  = sorted.length;
+  const peak  = sorted.reduce((a,[k,v])=>v>a[1]?[k,v]:a,['',0]);
+
+  if(document.getElementById('v-total')) document.getElementById('v-total').textContent=total.toLocaleString();
+  if(document.getElementById('v-today')) document.getElementById('v-today').textContent=(visitors[todayKey()]||0).toLocaleString();
+  if(document.getElementById('v-days'))  document.getElementById('v-days').textContent=days;
+  if(document.getElementById('v-peak'))  document.getElementById('v-peak').textContent=peak[1]?`${peak[1]} on ${fmtDate(peak[0])}`:'—';
+
+  const log = document.getElementById('visitLog');
+  if(log){
+    if(!sorted.length){
+      log.innerHTML='<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:2rem;">No visits recorded yet.</div>';
+    } else {
+      log.innerHTML=sorted.map(([k,v])=>`
+        <div class="log-item">
+          <span class="log-date">${fmtDate(k)} &nbsp;<span style="color:rgba(255,255,255,.2);font-size:.65rem;">${k}</span></span>
+          <span class="log-count">${v} visit${v!==1?'s':''}</span>
+        </div>
+      `).join('');
+    }
+  }
+}
+
+function resetVisitors(){
+  if(!confirm('Reset all visitor data? This cannot be undone.')) return;
+  localStorage.removeItem(STORAGE_VISITORS);
+  refreshAll();
+  toast('Visitor data cleared','success');
+}
+
+/* ── PHOTO UPLOAD ── */
+function setupUpload(){
+  const zone  = document.getElementById('uploadZone');
+  const input = document.getElementById('fileInput');
+
+  input.addEventListener('change', e=>handleFiles(e.target.files));
+
+  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
+  zone.addEventListener('drop', e=>{
+    e.preventDefault(); zone.classList.remove('drag');
+    handleFiles(e.dataTransfer.files);
+  });
+}
+
+function handleFiles(files){
+  if(!files.length) return;
+  const arr = Array.from(files).filter(f=>f.type.startsWith('image/'));
+  if(!arr.length){ toast('Please select image files only','error'); return; }
+
+  const prog = document.getElementById('uploadProgress');
+  const bar  = document.getElementById('uploadBar');
+  prog.style.display='block'; bar.style.width='0%';
+
+  let done=0;
+  arr.forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      const photos = getPhotos();
+      photos.unshift({ id:Date.now()+Math.random(), src:e.target.result, name:file.name, date:new Date().toISOString() });
+      savePhotos(photos);
+      done++;
+      bar.style.width = (done/arr.length*100)+'%';
+      if(done===arr.length){
+        setTimeout(()=>{ prog.style.display='none'; bar.style.width='0%'; },600);
+        refreshAll();
+        toast(`${done} photo${done>1?'s':''} uploaded successfully`,'success');
+        document.getElementById('fileInput').value='';
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ── PHOTO GRID ── */
+function refreshPhotosGrid(){
+  const photos = getPhotos();
+  const grid   = document.getElementById('photosGrid');
+  const count  = document.getElementById('photosCount');
+  if(!grid) return;
+  count.textContent = photos.length+' photo'+(photos.length!==1?'s':'');
+  if(!photos.length){
+    grid.innerHTML='<div class="empty-photos"><div class="big">&#128444;&#65039;</div><div>No photos yet. Upload some above!</div></div>';
+    return;
+  }
+  grid.innerHTML = photos.map(p=>`
+    <div class="photo-item">
+      <img src="${p.src}" alt="${p.name}" loading="lazy"/>
+      <div class="photo-over">
+        <button class="photo-btn pb-view" onclick="openLightbox('${p.id}')" title="View">&#128065;</button>
+        <button class="photo-btn pb-del"  onclick="deletePhoto('${p.id}')" title="Delete">&#128465;</button>
+      </div>
+      <div class="photo-date">${new Date(p.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
+    </div>
+  `).join('');
+}
+
+function refreshRecentGrid(){
+  const photos = getPhotos().slice(0,6);
+  const grid   = document.getElementById('recentGrid');
+  if(!grid) return;
+  if(!photos.length){
+    grid.innerHTML='<div style="color:var(--muted);font-size:.8rem;padding:1.5rem;grid-column:1/-1;">No photos uploaded yet.</div>';
+    return;
+  }
+  grid.innerHTML = photos.map(p=>`
+    <div class="photo-item" onclick="openLightbox('${p.id}')">
+      <img src="${p.src}" alt="${p.name}" loading="lazy"/>
+      <div class="photo-date">${new Date(p.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
+    </div>
+  `).join('');
+}
+
+function deletePhoto(id){
+  if(!confirm('Delete this photo?')) return;
+  savePhotos(getPhotos().filter(p=>String(p.id)!==String(id)));
+  refreshAll();
+  toast('Photo deleted','success');
+}
+
+function clearPhotos(){
+  if(!confirm('Delete ALL photos? This cannot be undone.')) return;
+  savePhotos([]);
+  refreshAll();
+  toast('All photos cleared','success');
+}
+
+function updateBadge(){
+  const b=document.getElementById('photoBadge');
+  if(b) b.textContent=getPhotos().length;
+}
+
+/* ── LIGHTBOX ── */
+function openLightbox(id){
+  const p = getPhotos().find(x=>String(x.id)===String(id));
+  if(!p) return;
+  document.getElementById('lbImg').src=p.src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lbImg').src='';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
+
+/* ── TOAST ── */
+function toast(msg,type='success'){
+  const wrap=document.getElementById('toastWrap');
+  const el=document.createElement('div');
+  el.className='toast '+type;
+  el.innerHTML=(type==='success'?'&#10003; ':'&#9888; ')+msg;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(),300); },2800);
+}
+</script>
+</body>
+</html>

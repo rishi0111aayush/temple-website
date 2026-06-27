@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kuwee Wale Baba Ji · Agra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100;0,9..144,400;0,9..144,700;1,9..144,100;1,9..144,400;1,9..144,700&family=Outfit:wght@200;300;400;500&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --bg:      #1A0A00;
+  --bg2:     #200D00;
+  --bg3:     #2C1400;
+  --panel:   #3A1A06;
+  --border:  rgba(212,168,67,.12);
+  --saf:     #FF6B00;
+  --gold:    #D4AF37;
+  --rose:    #8B1A1A;
+  --teal:    #C9831A;
+  --text:    #FDF5E6;
+  --muted:   #A08060;
+  --dim:     rgba(253,245,230,.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-weight:300;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--gold);}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+  opacity:.025;
+}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1rem 3.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s,border-color .4s;
+  border-bottom:1px solid transparent;
+}
+.nav.on{background:rgba(26,10,0,.95);border-color:var(--border);backdrop-filter:blur(16px);}
+.nav-brand{display:flex;align-items:center;gap:.8rem;text-decoration:none;}
+.nav-gem{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,var(--rose),var(--saf));
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;
+}
+.nav-title{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--text);letter-spacing:.01em;}
+.nav-right{display:flex;align-items:center;gap:2rem;}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{font-size:.75rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--saf);}
+.nav-cta{
+  padding:.5rem 1.4rem;border-radius:8px;
+  background:var(--saf);color:#fff!important;
+  font-size:.75rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  text-decoration:none;transition:background .2s,transform .15s;
+}
+.nav-cta:hover{background:#d06018;transform:translateY(-1px);}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero{
+  min-height:100vh;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.hero-aurora{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 100% 70% at 20% 10%,rgba(212,175,55,.14) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 80% at 80% 80%,rgba(255,107,0,.12) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 50%,rgba(139,26,26,.1) 0%,transparent 55%);
+}
+.hero-dots{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 100%);
+}
+.hero-line{position:absolute;background:linear-gradient(to bottom,transparent,var(--border),transparent);width:1px;top:0;bottom:0;}
+.hero-main{
+  position:relative;z-index:2;flex:1;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  text-align:center;padding:8rem 3.5rem 4rem;
+  gap:2rem;
+}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.65rem;font-weight:500;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--gold);animation:fu .8s .1s both;
+}
+.hero-kicker-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.hero-h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3.5rem,9vw,8.5rem);
+  font-weight:100;line-height:.92;letter-spacing:-.03em;
+  color:var(--text);animation:fu .8s .25s both;
+}
+.hero-h1 strong{
+  font-weight:700;font-style:italic;display:block;
+  background:linear-gradient(110deg,var(--saf) 0%,var(--gold) 60%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-desc{
+  font-size:1rem;color:var(--dim);line-height:1.9;
+  max-width:560px;animation:fu .8s .4s both;
+}
+.hero-devanagari{
+  font-family:'Noto Serif Devanagari',serif;
+  font-size:1.5rem;color:var(--gold);opacity:.7;
+  animation:fu .8s .55s both;letter-spacing:.05em;
+}
+.hero-scroll{
+  position:relative;z-index:2;
+  display:flex;align-items:center;gap:1rem;
+  padding:1.5rem 3.5rem 2rem;
+  animation:fu .8s .9s both;
+}
+.hero-scroll-line{flex:0 0 60px;height:1px;background:var(--border);}
+.hero-scroll-txt{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);}
+@keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+
+/* Three pillars row below hero text */
+.hero-pillars{
+  display:flex;gap:2px;animation:fu .8s .65s both;
+  margin-top:1rem;
+}
+.hp{
+  padding:.5rem 1.4rem;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+}
+.hp:first-child{border-radius:8px 0 0 8px;}
+.hp:last-child{border-radius:0 8px 8px 0;}
+.hp.hl{color:var(--gold);border-color:rgba(212,175,55,.25);background:rgba(212,175,55,.07);}
+
+/* ═══════════════════════════════════════════
+   BAND
+═══════════════════════════════════════════ */
+.band{background:var(--rose);overflow:hidden;padding:.6rem 0;}
+.band-track{display:inline-flex;gap:2.5rem;animation:tick 18s linear infinite;white-space:nowrap;}
+.band-item{font-size:.7rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.75);}
+.band-sep{color:rgba(255,255,255,.35);font-size:.5rem;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ═══════════════════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════════════════ */
+.sec{padding:7rem 3.5rem;position:relative;}
+.sec-inner{max-width:1100px;margin:0 auto;}
+.sec-tag{font-size:.62rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--saf);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem;}
+.sec-tag::after{content:'';flex:0 0 24px;height:1px;background:var(--saf);opacity:.5;}
+.sec-h{font-family:'Fraunces',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;color:var(--text);}
+.sec-h em{font-style:italic;font-weight:700;color:var(--gold);}
+.sec-lead{font-size:.9rem;color:var(--dim);line-height:1.95;max-width:500px;margin-top:1rem;}
+
+/* ═══════════════════════════════════════════
+   HISTORY SECTION
+═══════════════════════════════════════════ */
+#history{background:var(--bg2);}
+.history-wrap{
+  display:grid;grid-template-columns:1fr 1.1fr;gap:7rem;align-items:start;
+}
+.history-body p{font-size:.88rem;color:var(--dim);line-height:1.95;margin-bottom:1.2rem;}
+.history-bq{
+  margin:2rem 0;padding:1.4rem 1.8rem 1.4rem 1.4rem;
+  border-left:3px solid var(--gold);
+  background:rgba(212,175,55,.06);border-radius:0 8px 8px 0;
+  font-family:'Fraunces',serif;font-size:1.05rem;font-style:italic;
+  color:var(--text);line-height:1.65;
+}
+
+/* Timeline */
+.timeline{display:flex;flex-direction:column;gap:0;position:relative;}
+.timeline::before{
+  content:'';position:absolute;left:18px;top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,var(--gold),rgba(212,175,55,.1));
+}
+.tl-item{display:flex;gap:1.4rem;padding-bottom:2.5rem;position:relative;}
+.tl-dot{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:var(--panel);border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;position:relative;z-index:1;
+}
+.tl-content{}
+.tl-year{font-size:.6rem;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--saf);margin-bottom:.3rem;}
+.tl-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--text);margin-bottom:.3rem;}
+.tl-desc{font-size:.8rem;color:var(--muted);line-height:1.7;}
+
+/* ═══════════════════════════════════════════
+   CONNECTED TEMPLES
+═══════════════════════════════════════════ */
+#temples{background:var(--bg3);}
+.temples-intro{
+  display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-bottom:4rem;
+}
+.temples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.tpl-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;position:relative;
+  transition:transform .3s,border-color .3s;
+}
+.tpl-card:hover{transform:translateY(-6px);border-color:rgba(212,175,55,.3);}
+.tpl-top{
+  height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.8rem;
+  position:relative;overflow:hidden;
+}
+.tpl-top.t1{background:linear-gradient(155deg,#1A0510,#4A1020,#8B1A1A22);}
+.tpl-top.t2{background:linear-gradient(155deg,#0A0E1A,#1A2A4A,#1A3A6A22);}
+.tpl-glow{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(212,175,55,.12),transparent 70%);
+}
+.tpl-symbol{font-size:3.5rem;position:relative;z-index:1;filter:drop-shadow(0 0 12px rgba(212,175,55,.4));}
+.tpl-body{padding:1.6rem 1.8rem;}
+.tpl-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;font-style:italic;color:var(--text);margin-bottom:.3rem;}
+.tpl-loc{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--saf);margin-bottom:.8rem;}
+.tpl-desc{font-size:.8rem;color:var(--muted);line-height:1.75;}
+.tpl-link-tag{
+  display:inline-flex;align-items:center;gap:.4rem;
+  margin-top:1rem;padding:.3rem .9rem;border-radius:100px;
+  background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);
+  font-size:.65rem;color:var(--gold);letter-spacing:.1em;
+}
+
+/* Connection line between main temple and linked ones */
+.connection-banner{
+  margin:3rem 0;padding:1.5rem 2rem;
+  background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:12px;
+  display:flex;align-items:center;gap:1.5rem;
+  font-size:.85rem;color:var(--dim);line-height:1.7;
+}
+.connection-banner strong{color:var(--gold);}
+.connection-icon{font-size:2rem;flex-shrink:0;}
+
+/* ═══════════════════════════════════════════
+   LOCATION
+═══════════════════════════════════════════ */
+#location{background:var(--bg2);}
+.location-wrap{
+  display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:start;
+}
+.rrow{display:flex;gap:1.2rem;margin-bottom:1.8rem;align-items:flex-start;}
+.rrow-ico{
+  width:44px;height:44px;flex-shrink:0;border-radius:10px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+}
+.rrow-lbl{font-size:.6rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--saf);margin-bottom:.25rem;}
+.rrow-val{font-size:.88rem;color:var(--dim);line-height:1.7;}
+
+/* Map card */
+.map-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+}
+.map-visual{
+  height:300px;
+  background:linear-gradient(160deg,#1A0800,#2C1200,#1A0800);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.map-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(212,175,55,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(212,175,55,.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.loc-rings{position:relative;width:160px;height:160px;display:flex;align-items:center;justify-content:center;}
+.lr{position:absolute;border-radius:50%;border:1px solid rgba(212,175,55,var(--op,.15));animation:rpl var(--d,3s) ease-out var(--dl,0s) infinite;}
+.lr1{width:160px;height:160px;--op:.08;--d:3s;--dl:0s;}
+.lr2{width:120px;height:120px;--op:.12;--d:3s;--dl:.4s;}
+.lr3{width:80px;height:80px;--op:.2;--d:3s;--dl:.8s;}
+.lr4{width:44px;height:44px;--op:.35;--d:3s;--dl:1.2s;border-color:rgba(212,175,55,.5);}
+@keyframes rpl{0%{opacity:.8;transform:scale(1);}100%{opacity:0;transform:scale(1.4);}}
+.loc-pin{position:relative;z-index:2;font-size:2.5rem;animation:bob 2.5s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.map-footer{
+  padding:1.5rem 1.8rem;display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--border);
+}
+.map-footer h4{font-family:'Fraunces',serif;font-size:1rem;font-style:italic;font-weight:600;color:var(--text);}
+.map-footer p{font-size:.72rem;color:var(--muted);margin-top:.2rem;}
+.map-open{
+  padding:.5rem 1.2rem;background:rgba(212,175,55,.12);
+  border:1px solid rgba(212,175,55,.3);color:var(--gold);
+  font-size:.7rem;font-weight:500;border-radius:8px;text-decoration:none;
+  white-space:nowrap;transition:background .2s;
+}
+.map-open:hover{background:rgba(212,175,55,.22);}
+
+/* ═══════════════════════════════════════════
+   PANDIT JI & MEMBERS
+═══════════════════════════════════════════ */
+#members{background:var(--bg);}
+.members-intro{text-align:center;margin-bottom:4rem;}
+.members-intro .sec-tag{justify-content:center;}
+.members-intro .sec-tag::after{display:none;}
+.members-intro .sec-h{text-align:center;}
+.members-intro .sec-lead{margin:1rem auto 0;text-align:center;}
+
+/* Main Pandit Ji card */
+.panditji-card{
+  background:var(--panel);border:1px solid rgba(212,175,55,.2);border-radius:20px;
+  padding:2.5rem;display:flex;gap:2.5rem;align-items:flex-start;
+  margin-bottom:3rem;position:relative;overflow:hidden;
+  max-width:800px;margin-left:auto;margin-right:auto;margin-bottom:3rem;
+}
+.panditji-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--saf),var(--gold));
+}
+.panditji-avatar{
+  width:100px;height:100px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--rose),var(--saf));
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.8rem;border:3px solid rgba(212,175,55,.3);
+}
+.panditji-info{}
+.panditji-role{font-size:.6rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--saf);margin-bottom:.4rem;}
+.panditji-name{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;font-style:italic;color:var(--text);margin-bottom:.4rem;}
+.panditji-sub{font-size:.82rem;color:var(--muted);margin-bottom:1rem;}
+.panditji-desc{font-size:.85rem;color:var(--dim);line-height:1.8;}
+.panditji-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.2rem;}
+.ptag{
+  padding:.28rem .9rem;border-radius:100px;
+  background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);
+  font-size:.65rem;color:var(--gold);letter-spacing:.08em;
+}
+
+/* Family / members grid */
+.members-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;
+  max-width:900px;margin:0 auto;
+}
+.member-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;
+  padding:1.8rem 1.5rem;text-align:center;
+  transition:transform .3s,border-color .3s;position:relative;overflow:hidden;
+}
+.member-card:hover{transform:translateY(-5px);border-color:rgba(212,175,55,.25);}
+.member-card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:var(--mc,var(--gold));opacity:.6;
+}
+.member-avatar{
+  width:70px;height:70px;border-radius:50%;margin:0 auto 1rem;
+  background:var(--ma,linear-gradient(135deg,#3A1A06,#6A3010));
+  display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+  border:2px solid var(--border);
+}
+.member-name{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--text);margin-bottom:.25rem;}
+.member-role{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;}
+.member-note{font-size:.75rem;color:var(--dim);line-height:1.6;}
+.occasion-note{
+  margin-top:3rem;padding:1.4rem 1.8rem;
+  background:rgba(255,107,0,.07);border:1px solid rgba(255,107,0,.2);border-radius:12px;
+  display:flex;align-items:center;gap:1.2rem;
+  font-size:.85rem;color:var(--dim);line-height:1.7;
+  max-width:700px;margin-left:auto;margin-right:auto;margin-top:3rem;
+}
+.occasion-note strong{color:var(--saf);}
+
+/* ═══════════════════════════════════════════
+   REACH US / CONTACT
+═══════════════════════════════════════════ */
+#contact{background:var(--rose);}
+.contact-inner{
+  text-align:center;max-width:700px;margin:0 auto;
+}
+.contact-inner .sec-tag{justify-content:center;color:rgba(255,255,255,.6);}
+.contact-inner .sec-tag::after{background:rgba(255,255,255,.3);}
+.contact-h{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;line-height:1.1;
+  color:#fff;margin-bottom:1rem;
+}
+.contact-h em{font-style:italic;font-weight:700;}
+.contact-sub{font-size:.95rem;color:rgba(255,255,255,.7);line-height:1.85;margin-bottom:2.5rem;}
+.contact-details{
+  display:flex;flex-direction:column;gap:.8rem;
+  margin-bottom:2.5rem;
+}
+.cd-row{
+  display:flex;align-items:center;justify-content:center;gap:.8rem;
+  font-size:.88rem;color:rgba(255,255,255,.8);
+}
+.cd-lbl{font-size:.6rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.45);width:80px;text-align:right;}
+.cd-val{color:rgba(255,255,255,.9);}
+.reach-btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:1rem 2.8rem;background:#fff;color:var(--rose);
+  font-size:.88rem;font-weight:500;letter-spacing:.06em;border-radius:10px;
+  text-decoration:none;transition:transform .15s,box-shadow .2s;
+  font-family:'Outfit',sans-serif;
+}
+.reach-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
+.contact-placeholder{
+  margin-top:1.5rem;font-size:.72rem;color:rgba(255,255,255,.3);letter-spacing:.08em;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{
+  background:var(--bg);border-top:1px solid var(--border);
+  padding:4rem 3.5rem 2.5rem;
+}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr;gap:4rem;margin-bottom:3rem;}
+.ftb-logo{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;font-style:italic;color:var(--text);margin-bottom:.8rem;display:block;}
+.ftb-logo span{color:var(--saf);}
+.ftb-desc{font-size:.82rem;color:var(--muted);line-height:1.85;max-width:260px;margin-bottom:1.5rem;}
+.ftb-mantra{font-family:'Noto Serif Devanagari',serif;font-size:1.1rem;color:var(--gold);display:block;}
+.ft-col h5{font-size:.6rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:1.2rem;}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+.ft-col ul li a{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .2s;}
+.ft-col ul li a:hover{color:var(--saf);}
+.ft-bot{
+  border-top:1px solid var(--border);padding-top:1.8rem;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.72rem;color:rgba(255,255,255,.2);
+}
+
+/* ═══════════════════════════════════════════
+   REVEAL
+═══════════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.rv.on{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}.d5{transition-delay:.5s;}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:900px){
+  .nav{padding:.8rem 1.5rem;}
+  .nav-links{display:none;}
+  .hero-main{padding:6rem 1.5rem 3rem;}
+  .history-wrap{grid-template-columns:1fr;gap:3.5rem;}
+  .temples-intro{grid-template-columns:1fr;gap:2rem;}
+  .temples-grid{grid-template-columns:1fr;}
+  .location-wrap{grid-template-columns:1fr;gap:3rem;}
+  .members-grid{grid-template-columns:1fr 1fr;gap:1rem;}
+  .panditji-card{flex-direction:column;align-items:center;text-align:center;}
+  .panditji-tags{justify-content:center;}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:2.5rem;}
+  .ft-bot{flex-direction:column;gap:.5rem;text-align:center;}
+  .sec{padding:5rem 1.5rem;}
+  footer{padding:4rem 1.5rem 2rem;}
+}
+@media(max-width:600px){
+  .members-grid{grid-template-columns:1fr;}
+  .temples-grid{grid-template-columns:1fr;}
+  .hero-pillars{flex-direction:column;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-brand">
+    <div class="nav-gem">&#128509;</div>
+    <span class="nav-title">Kuwee Wale Baba Ji</span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#history">History</a>
+      <a href="#temples">Connected Temples</a>
+      <a href="#location">Location</a>
+      <a href="#members">Our People</a>
+      <a href="#gallery" id="navGallery" style="display:none;">Gallery</a>
+    </div>
+    <a href="#contact" class="nav-cta">Reach Us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-aurora"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-line" style="left:20%"></div>
+  <div class="hero-line" style="left:80%"></div>
+
+  <div class="hero-main">
+    <div class="hero-kicker rv"><span class="hero-kicker-dot"></span>Sacred Temple · Agra, Uttar Pradesh</div>
+    <h1 class="hero-h1 rv d1">Kuwee Wale<strong>Baba Ji</strong></h1>
+    <p class="hero-desc rv d2">A timeless sanctuary of devotion and divine grace in the heart of Agra — a sacred site of heritage, history, and faith that has served generations of devotees for over a century.</p>
+    <div class="hero-devanagari rv d3">&#2384; जय माता दी &#2404;</div>
+    <div class="hero-pillars rv d4">
+      <div class="hp hl">Est. Early 1900s</div>
+      <div class="hp">Agra, UP</div>
+      <div class="hp">Open 365 Days</div>
+      <div class="hp hl">Free Entry</div>
+    </div>
+  </div>
+
+  <div class="hero-scroll rv">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-txt">Scroll to explore</span>
+  </div>
+</section>
+
+<!-- BAND -->
+<div class="band" aria-hidden="true">
+  <div class="band-track">
+    <span class="band-item">Jai Kuwee Wale Baba Ji</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">&#2332;&#2351; &#2350;&#2366;&#2340;&#2366; &#2342;&#2368;</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">Sacred Temple of Agra</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">Over 100 Years of Devotion</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">Connected Across Agra</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">Jai Kuwee Wale Baba Ji</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">&#2332;&#2351; &#2350;&#2366;&#2340;&#2366; &#2342;&#2368;</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">Sacred Temple of Agra</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">Over 100 Years of Devotion</span><span class="band-sep">&#10022;</span>
+    <span class="band-item">Connected Across Agra</span><span class="band-sep">&#10022;</span>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<section class="sec" id="history">
+  <div class="sec-inner">
+    <div class="history-wrap">
+
+      <div class="history-left">
+        <div class="sec-tag rv">Our Sacred Story</div>
+        <h2 class="sec-h rv d1">A Century of<br/><em>Faith & Devotion</em></h2>
+        <div class="history-body rv d2">
+          <p style="margin-top:1rem;">Kuwee Wale Baba Ji Mandir stands as one of Agra's most revered spiritual sanctuaries. Founded in the early 1900s by the ancestors of the current temple family, the mandir was established at a site believed to be divinely chosen — a small well (kuwaa) from which the deity's power is said to emanate, giving the temple its name.</p>
+          <p>For generations, the temple has been managed by the same family lineage, carrying forward the sacred traditions of daily puja, aarti, and community service. What began as a modest shrine has grown into a landmark of faith, drawing devotees from across Agra, Mathura, and all of Uttar Pradesh.</p>
+          <blockquote class="history-bq">"Where the earth meets the divine — Kuwee Wale Baba Ji has been our family's protector, our city's blessing, and our community's anchor for over a hundred years."</blockquote>
+          <p>The temple is especially vibrant during Navratri, Diwali, and Dussehra, when thousands gather for grand celebrations, kirtan, and prasad distribution. Every festival is conducted under the personal guidance of Pandit Ji and his family, maintaining the purity and sanctity of each ritual.</p>
+        </div>
+      </div>
+
+      <div class="history-right rv d2">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot">&#128336;</div>
+            <div class="tl-content">
+              <p class="tl-year">Early 1900s</p>
+              <p class="tl-title">Temple Founded</p>
+              <p class="tl-desc">The original shrine was established at the sacred well (kuwaa) by the founding family, beginning a legacy of devotion in Agra.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">&#127963;</div>
+            <div class="tl-content">
+              <p class="tl-year">1940s</p>
+              <p class="tl-title">Temple Expanded</p>
+              <p class="tl-desc">The mandir structure was expanded to accommodate growing numbers of devotees. The main sanctum and puja hall were constructed.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">&#127988;</div>
+            <div class="tl-content">
+              <p class="tl-year">1970s</p>
+              <p class="tl-title">Community Seva Begins</p>
+              <p class="tl-desc">The temple formalised its community service, beginning regular prasad distribution and opening its doors to devotees of all backgrounds.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">&#128081;</div>
+            <div class="tl-content">
+              <p class="tl-year">2000s</p>
+              <p class="tl-title">Modern Renovation</p>
+              <p class="tl-desc">The temple underwent a full renovation to preserve its heritage structure while improving facilities for the growing number of pilgrims.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">&#10024;</div>
+            <div class="tl-content">
+              <p class="tl-year">Today</p>
+              <p class="tl-title">Living Legacy</p>
+              <p class="tl-desc">Under the care of Pandit Ji and his family, the temple continues its sacred mission — welcoming all who seek blessings, peace, and divine grace.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONNECTED TEMPLES -->
+<section class="sec" id="temples">
+  <div class="sec-inner">
+    <div class="temples-intro">
+      <div>
+        <div class="sec-tag rv">Sacred Network</div>
+        <h2 class="sec-h rv d1">Linked to Two<br/><em>Historic Temples</em></h2>
+      </div>
+      <p class="sec-lead rv d2">Kuwee Wale Baba Ji is spiritually and historically connected to two other sacred mandirs in Agra — all three share the same lineage of priests, the same devotional traditions, and the same commitment to community service across the city.</p>
+    </div>
+
+    <div class="connection-banner rv">
+      <span class="connection-icon">&#128279;</span>
+      <span>All three temples are overseen by the <strong>same priestly family</strong>. Devotees visiting Kuwee Wale Baba Ji are also welcome at both connected temples, where the same rituals, traditions, and family values are upheld.</span>
+    </div>
+
+    <div class="temples-grid">
+      <div class="tpl-card rv d1">
+        <div class="tpl-top t1">
+          <div class="tpl-glow"></div>
+          <div class="tpl-symbol">&#127963;</div>
+        </div>
+        <div class="tpl-body">
+          <p class="tpl-name">Shri Devi Mandir</p>
+          <p class="tpl-loc">&#128205; Kinari Bazaar Area, Agra</p>
+          <p class="tpl-desc">Established in the mid-1800s, this temple shares the same deity lineage and is managed by the same family. A cornerstone of devotion in old Agra city, it is known for its Navratri celebrations that draw thousands annually.</p>
+          <div class="tpl-link-tag">&#128279; Sister Temple · Same Family Lineage</div>
+        </div>
+      </div>
+
+      <div class="tpl-card rv d2">
+        <div class="tpl-top t2">
+          <div class="tpl-glow"></div>
+          <div class="tpl-symbol">&#128509;</div>
+        </div>
+        <div class="tpl-body">
+          <p class="tpl-name">Shri Mahadev Mandir</p>
+          <p class="tpl-loc">&#128205; Belanganj, Agra</p>
+          <p class="tpl-desc">The third temple in this sacred network, dedicated to Lord Shiva and traditionally connected to the Baba Ji temple through generations of joint celebrations, shared prasad distribution, and community events.</p>
+          <div class="tpl-link-tag">&#128279; Partner Temple · Joint Festivals</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="sec" id="location">
+  <div class="sec-inner">
+    <div class="location-wrap">
+      <div>
+        <div class="sec-tag rv">Find Us</div>
+        <h2 class="sec-h rv d1">Temple<br/><em>Location</em></h2>
+        <p class="sec-lead rv d2" style="margin-bottom:2.5rem;">Situated in the heart of Agra, the temple is easily accessible from all major landmarks of the city.</p>
+
+        <div class="rrow rv d2">
+          <div class="rrow-ico">&#128205;</div>
+          <div>
+            <p class="rrow-lbl">Full Address</p>
+            <p class="rrow-val">Kuwee Wale Baba Ji Mandir<br/>[ Street / Mohalla Name — to be updated ]<br/>Agra, Uttar Pradesh — 282 001, India</p>
+          </div>
+        </div>
+
+        <div class="rrow rv d3">
+          <div class="rrow-ico">&#128338;</div>
+          <div>
+            <p class="rrow-lbl">Temple Hours</p>
+            <p class="rrow-val">Open daily — 5:00 AM to 9:00 PM<br/>Open all 365 days of the year</p>
+          </div>
+        </div>
+
+        <div class="rrow rv d3">
+          <div class="rrow-ico">&#128645;</div>
+          <div>
+            <p class="rrow-lbl">By Train</p>
+            <p class="rrow-val">Agra Cantt. Station — approx. 3 km<br/>Agra Fort Station — approx. 2 km</p>
+          </div>
+        </div>
+
+        <div class="rrow rv d4">
+          <div class="rrow-ico">&#9992;&#65039;</div>
+          <div>
+            <p class="rrow-lbl">By Air</p>
+            <p class="rrow-val">Agra Airport (Pandit Deen Dayal Upadhyay)<br/>approx. 12 km from the temple</p>
+          </div>
+        </div>
+
+        <div class="rrow rv d4">
+          <div class="rrow-ico">&#128664;</div>
+          <div>
+            <p class="rrow-lbl">Nearby Landmark</p>
+            <p class="rrow-val">[ Nearest landmark — to be updated ]<br/>Auto-rickshaws and e-rickshaws available from all major points</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card rv d2">
+        <div class="map-visual">
+          <div class="map-grid"></div>
+          <div class="loc-rings">
+            <div class="lr lr1"></div>
+            <div class="lr lr2" style="--dl:.5s"></div>
+            <div class="lr lr3" style="--dl:1s"></div>
+            <div class="lr lr4" style="--dl:1.5s"></div>
+            <span class="loc-pin">&#128205;</span>
+          </div>
+        </div>
+        <div class="map-footer">
+          <div>
+            <h4>Kuwee Wale Baba Ji</h4>
+            <p>Agra, Uttar Pradesh, India</p>
+          </div>
+          <a href="#" class="map-open">Open Maps &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PANDIT JI & MEMBERS -->
+<section class="sec" id="members">
+  <div class="sec-inner">
+    <div class="members-intro rv">
+      <div class="sec-tag">Our People</div>
+      <h2 class="sec-h">Meet <em>Pandit Ji &amp; Family</em></h2>
+      <p class="sec-lead">The temple is lovingly managed by Pandit Ji and his family, who are always present to guide, assist, and bless devotees — for daily worship, special occasions, and personal meetings.</p>
+    </div>
+
+    <!-- Main Pandit Ji -->
+    <div class="panditji-card rv d1">
+      <div class="panditji-avatar">&#129489;</div>
+      <div class="panditji-info">
+        <p class="panditji-role">Chief Priest · Head of Temple</p>
+        <p class="panditji-name">Pandit Ji [ Name to be updated ]</p>
+        <p class="panditji-sub">3rd Generation Priest · Kuwee Wale Baba Ji Mandir, Agra</p>
+        <p class="panditji-desc">Pandit Ji has dedicated his life to the service of Kuwee Wale Baba Ji and its devotees. A third-generation priest of this sacred temple, he conducts all major pujas, aartis, and ceremonies with strict adherence to Vedic traditions. He and his family are personally available for spiritual consultations, occasion-specific ceremonies, and any community meetings.</p>
+        <div class="panditji-tags">
+          <span class="ptag">Vedic Rituals</span>
+          <span class="ptag">Daily Aarti</span>
+          <span class="ptag">Navratri Puja</span>
+          <span class="ptag">Family Occasions</span>
+          <span class="ptag">Personal Blessings</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family Members Grid -->
+    <div class="members-grid">
+      <div class="member-card rv d1" style="--mc:var(--saf)">
+        <div class="member-avatar" style="--ma:linear-gradient(135deg,#3A1A06,#8B1A1A)">&#129489;</div>
+        <p class="member-name">[ Name — to be updated ]</p>
+        <p class="member-role">Son · Assistant Priest</p>
+        <p class="member-note">Assists Pandit Ji in daily rituals and is being trained in full Vedic tradition to carry forward the family legacy.</p>
+      </div>
+
+      <div class="member-card rv d2" style="--mc:var(--gold)">
+        <div class="member-avatar" style="--ma:linear-gradient(135deg,#1A1A0A,#4A4010)">&#128104;&#8205;&#128105;&#8205;&#128103;</div>
+        <p class="member-name">[ Name — to be updated ]</p>
+        <p class="member-role">Daughter-in-Law · Seva Coordinator</p>
+        <p class="member-note">Oversees prasad preparation, floral decoration, and coordinates with families for special occasion pujas and ceremonies.</p>
+      </div>
+
+      <div class="member-card rv d3" style="--mc:var(--rose)">
+        <div class="member-avatar" style="--ma:linear-gradient(135deg,#0A1A0A,#1A4A2A)">&#128116;</div>
+        <p class="member-name">[ Name — to be updated ]</p>
+        <p class="member-role">Grandson · Temple Member</p>
+        <p class="member-note">The youngest generation of the temple family, present during festivals and special occasions to support the temple's activities.</p>
+      </div>
+    </div>
+
+    <div class="occasion-note rv d3">
+      <span style="font-size:1.5rem">&#128222;</span>
+      <span>Pandit Ji and his family are available for <strong>personal meetings, occasion-specific ceremonies, and spiritual guidance</strong>. For weddings, mundan, griha pravesh, or any sacred occasion — simply reach out to schedule a meeting.</span>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY (auto-loads from dashboard uploads) -->
+<section class="sec" id="gallery" style="background:var(--bg3);display:none;" id="gallerySection">
+  <div class="sec-inner">
+    <div class="sec-tag rv">Photo Gallery</div>
+    <h2 class="sec-h rv d1">Temple <em>Moments</em></h2>
+    <p class="sec-lead rv d2" style="margin-bottom:3rem;">A glimpse into the sacred spaces, celebrations, and daily life of Kuwee Wale Baba Ji Mandir.</p>
+    <div id="siteGalleryGrid" style="
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:1rem;
+    "></div>
+  </div>
+</section>
+
+<style>
+.gal-item{
+  position:relative;border-radius:12px;overflow:hidden;
+  aspect-ratio:1;background:var(--panel);border:1px solid var(--border);
+  cursor:pointer;
+}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.25,.46,.45,.94);}
+.gal-item:hover img{transform:scale(1.07);}
+.gal-over{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(26,8,0,.8) 0%,transparent 50%);
+  opacity:0;transition:opacity .3s;
+  display:flex;align-items:flex-end;padding:1rem;
+}
+.gal-item:hover .gal-over{opacity:1;}
+.gal-over-txt{font-family:'Fraunces',serif;font-size:.88rem;font-style:italic;color:var(--text);}
+
+/* Gallery lightbox */
+.g-lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.g-lb.open{display:flex;}
+.g-lb img{max-width:90vw;max-height:88vh;border-radius:12px;object-fit:contain;}
+.g-lb-close{position:absolute;top:1.5rem;right:1.5rem;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.g-lb-close:hover{background:rgba(255,255,255,.2);}
+</style>
+
+<div class="g-lb" id="galLb" onclick="closeGalLb()">
+  <button class="g-lb-close" onclick="closeGalLb()">&#10005;</button>
+  <img id="galLbImg" src="" alt=""/>
+</div>
+
+<!-- REACH US / CONTACT -->
+<section class="sec" id="contact">
+  <div class="contact-inner rv">
+    <div class="sec-tag">Contact</div>
+    <h2 class="contact-h">Get in <em>Touch</em><br/>with Us</h2>
+    <p class="contact-sub">Whether you are visiting for darshan, planning a special occasion, or simply wish to connect — we are always here for you. Pandit Ji and the temple family welcome all with open arms.</p>
+
+    <div class="contact-details">
+      <div class="cd-row">
+        <span class="cd-lbl">Phone</span>
+        <span class="cd-val">[ +91 XXXXX XXXXX — to be updated ]</span>
+      </div>
+      <div class="cd-row">
+        <span class="cd-lbl">WhatsApp</span>
+        <span class="cd-val">[ +91 XXXXX XXXXX — to be updated ]</span>
+      </div>
+      <div class="cd-row">
+        <span class="cd-lbl">Email</span>
+        <span class="cd-val">[ email address — to be updated ]</span>
+      </div>
+      <div class="cd-row">
+        <span class="cd-lbl">Address</span>
+        <span class="cd-val">Kuwee Wale Baba Ji Mandir, Agra — 282 001</span>
+      </div>
+    </div>
+
+    <a href="tel:+91XXXXXXXXXX" class="reach-btn">
+      &#128222;&nbsp; Reach Us
+    </a>
+    <p class="contact-placeholder">Contact details will be updated shortly</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <span class="ftb-logo">Kuwee Wale <span>Baba Ji</span></span>
+      <p class="ftb-desc">A sacred sanctuary of devotion, heritage, and grace in Agra, Uttar Pradesh. May Baba Ji bless all who seek divine grace.</p>
+      <span class="ftb-mantra">&#2384; &#2332;&#2351; &#2350;&#2366;&#2340;&#2366; &#2342;&#2368; &#2342;&#2368;&#2346;&#2325;</span>
+    </div>
+    <div class="ft-col">
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="#history">Temple History</a></li>
+        <li><a href="#temples">Connected Temples</a></li>
+        <li><a href="#location">Location &amp; Directions</a></li>
+        <li><a href="#members">Pandit Ji &amp; Family</a></li>
+        <li><a href="#contact">Reach Us</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h5>Festivals</h5>
+      <ul>
+        <li><a href="#">Navratri</a></li>
+        <li><a href="#">Diwali</a></li>
+        <li><a href="#">Dussehra</a></li>
+        <li><a href="#">Janmashtami</a></li>
+        <li><a href="#">All Occasions</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <span>&copy; 2025 Kuwee Wale Baba Ji, Agra. All rights reserved.</span>
+    <span style="display:flex;align-items:center;gap:1.5rem;">
+      <span>Designed with devotion &#127980;</span>
+      <a href="dashboard.html" style="font-size:.65rem;color:rgba(255,255,255,.15);text-decoration:none;letter-spacing:.1em;transition:color .2s;" onmouseover="this.style.color='rgba(212,175,55,.5)'" onmouseout="this.style.color='rgba(255,255,255,.15)'">&#9881; Dashboard</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 50), {passive:true});
+  const io = new IntersectionObserver(
+    e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('on'); }),
+    {threshold:.1}
+  );
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if(!t) return; e.preventDefault();
+      window.scrollTo({top: t.offsetTop - 64, behavior:'smooth'});
+    });
+  });
+
+  /* ── GALLERY FROM DASHBOARD ── */
+  (function(){
+    try {
+      const photos = JSON.parse(localStorage.getItem('kwbj_photos')||'[]');
+      const sec    = document.getElementById('gallerySection') || document.querySelector('#gallery');
+      const grid   = document.getElementById('siteGalleryGrid');
+      if(!sec || !grid) return;
+      if(!photos.length){ sec.style.display='none'; return; }
+      sec.style.display='block';
+      grid.innerHTML = photos.map(p=>`
+        <div class="gal-item rv" onclick="openGalLb('${p.id}')">
+          <img src="${p.src}" alt="${p.name}" loading="lazy"/>
+          <div class="gal-over"><span class="gal-over-txt">${p.name.replace(/\.[^.]+$/,'')}</span></div>
+        </div>
+      `).join('');
+      // show gallery nav link
+      const navG = document.getElementById('navGallery');
+      if(navG) navG.style.display='block';
+      // re-observe new elements
+      document.querySelectorAll('.gal-item.rv').forEach(el=>io.observe(el));
+    } catch(e){}
+  })();
+
+  window._galleryPhotos = [];
+  try { window._galleryPhotos = JSON.parse(localStorage.getItem('kwbj_photos')||'[]'); } catch(e){}
+
+  function openGalLb(id){
+    const p = window._galleryPhotos.find(x=>String(x.id)===String(id));
+    if(!p) return;
+    document.getElementById('galLbImg').src = p.src;
+    document.getElementById('galLb').classList.add('open');
+  }
+  function closeGalLb(){
+    document.getElementById('galLb').classList.remove('open');
+    document.getElementById('galLbImg').src='';
+  }
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeGalLb(); });
+
+  /* ── VISITOR TRACKING ── */
+  (function(){
+    try {
+      const KEY = 'kwbj_visitors';
+      const d   = new Date();
+      const day = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      const data = JSON.parse(localStorage.getItem(KEY)||'{}');
+      data[day]  = (data[day]||0) + 1;
+      localStorage.setItem(KEY, JSON.stringify(data));
+    } catch(e){}
+  })();
+</script>
+</body>
+</html>
