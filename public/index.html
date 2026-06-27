@@ -903,31 +903,27 @@ footer{
     });
   });
 
-  /* ── GALLERY FROM DASHBOARD ── */
-  (function(){
-    try {
-      const photos = JSON.parse(localStorage.getItem('kwbj_photos')||'[]');
-      const sec    = document.getElementById('gallerySection') || document.querySelector('#gallery');
-      const grid   = document.getElementById('siteGalleryGrid');
-      if(!sec || !grid) return;
+  /* ── GALLERY FROM SERVER ── */
+  window._galleryPhotos = [];
+  fetch('/api/photos')
+    .then(r=>r.json())
+    .then(photos=>{
+      window._galleryPhotos = photos;
+      const sec  = document.getElementById('gallerySection');
+      const grid = document.getElementById('siteGalleryGrid');
+      const navG = document.getElementById('navGallery');
+      if(!sec||!grid) return;
       if(!photos.length){ sec.style.display='none'; return; }
       sec.style.display='block';
+      if(navG) navG.style.display='block';
       grid.innerHTML = photos.map(p=>`
         <div class="gal-item rv" onclick="openGalLb('${p.id}')">
           <img src="${p.src}" alt="${p.name}" loading="lazy"/>
           <div class="gal-over"><span class="gal-over-txt">${p.name.replace(/\.[^.]+$/,'')}</span></div>
         </div>
       `).join('');
-      // show gallery nav link
-      const navG = document.getElementById('navGallery');
-      if(navG) navG.style.display='block';
-      // re-observe new elements
       document.querySelectorAll('.gal-item.rv').forEach(el=>io.observe(el));
-    } catch(e){}
-  })();
-
-  window._galleryPhotos = [];
-  try { window._galleryPhotos = JSON.parse(localStorage.getItem('kwbj_photos')||'[]'); } catch(e){}
+    }).catch(()=>{});
 
   function openGalLb(id){
     const p = window._galleryPhotos.find(x=>String(x.id)===String(id));
@@ -942,16 +938,7 @@ footer{
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeGalLb(); });
 
   /* ── VISITOR TRACKING ── */
-  (function(){
-    try {
-      const KEY = 'kwbj_visitors';
-      const d   = new Date();
-      const day = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-      const data = JSON.parse(localStorage.getItem(KEY)||'{}');
-      data[day]  = (data[day]||0) + 1;
-      localStorage.setItem(KEY, JSON.stringify(data));
-    } catch(e){}
-  })();
+  fetch('/api/visit', { method:'POST' }).catch(()=>{});
 </script>
 </body>
 </html>

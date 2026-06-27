@@ -1,6 +1,9 @@
 services:
   - type: web
     name: temple-website
-    env: static
-    staticPublishPath: public
-    buildCommand: ""
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production

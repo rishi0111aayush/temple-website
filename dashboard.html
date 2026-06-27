@@ -501,33 +501,42 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
-/* ── DATA ── */
-const STORAGE_PHOTOS   = 'kwbj_photos';
-const STORAGE_VISITORS = 'kwbj_visitors';
+/* ── API HELPERS ── */
+async function apiGet(url){ try{ const r=await fetch(url); return r.ok?await r.json():null; }catch{ return null; } }
+async function apiPost(url,data){ try{ const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); return r.ok?await r.json():null; }catch{ return null; } }
+async function apiDel(url){ try{ const r=await fetch(url,{method:'DELETE'}); return r.ok?await r.json():null; }catch{ return null; } }
 
-function getPhotos(){ try{ return JSON.parse(localStorage.getItem(STORAGE_PHOTOS)||'[]'); }catch{return[];} }
-function savePhotos(p){ localStorage.setItem(STORAGE_PHOTOS,JSON.stringify(p)); }
-function getVisitors(){ try{ return JSON.parse(localStorage.getItem(STORAGE_VISITORS)||'{}'); }catch{return{};} }
-function saveVisitors(v){ localStorage.setItem(STORAGE_VISITORS,JSON.stringify(v)); }
+let _photos=[], _visitors={};
 
 function todayKey(){
   const d=new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
+function fmtDate(k){
+  const [y,m,d]=k.split('-');
+  return new Date(y,m-1,d).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+}
 
 /* ── INIT ── */
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', async ()=>{
   document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
-  refreshAll();
+  await refreshAll();
   setupUpload();
 });
 
-function refreshAll(){
-  refreshStats();
-  refreshPhotosGrid();
-  refreshRecentGrid();
-  refreshChart();
-  refreshVisitorPage();
+async function refreshAll(){
+  const [stats, photos] = await Promise.all([
+    apiGet('/api/stats'),
+    apiGet('/api/photos')
+  ]);
+  _photos   = photos  || [];
+  _visitors = stats?.visitors || {};
+  renderStats(stats);
+  renderPhotosGrid();
+  renderRecentGrid();
+  renderChart('chartWrap', 7);
+  renderChart('chartWrap2', 14);
+  renderVisitorPage();
   updateBadge();
 }
 
@@ -543,53 +552,40 @@ function showPage(id, el){
 }
 
 /* ── STATS ── */
-function refreshStats(){
-  const visitors = getVisitors();
-  const photos = getPhotos();
-  const total = Object.values(visitors).reduce((a,b)=>a+b,0);
-  const today = visitors[todayKey()]||0;
+function renderStats(stats){
+  const visitors = stats?.visitors || {};
+  const total    = Object.values(visitors).reduce((a,b)=>a+b,0);
+  const today    = visitors[todayKey()]||0;
   const lastDate = Object.keys(visitors).sort().pop();
+  const photoCount = stats?.photoCount ?? _photos.length;
 
-  document.getElementById('statTotal').textContent = total.toLocaleString();
-  document.getElementById('statToday').textContent = today.toLocaleString();
-  document.getElementById('statPhotos').textContent = photos.length;
-  document.getElementById('statLast').textContent = lastDate ? fmtDate(lastDate) : '—';
-  document.getElementById('trendToday').textContent = '+'+today+' today';
-  if(document.getElementById('v-total')) document.getElementById('v-total').textContent=total.toLocaleString();
-  if(document.getElementById('v-today')) document.getElementById('v-today').textContent=today.toLocaleString();
+  setText('statTotal',  total.toLocaleString());
+  setText('statToday',  today.toLocaleString());
+  setText('statPhotos', photoCount);
+  setText('statLast',   lastDate ? fmtDate(lastDate) : '—');
+  setText('trendToday', '+'+today+' today');
+  setText('v-total',    total.toLocaleString());
+  setText('v-today',    today.toLocaleString());
 }
-
-function fmtDate(k){
-  const [y,m,d]=k.split('-');
-  return new Date(y,m-1,d).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
-}
+function setText(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
 
 /* ── CHART ── */
-function refreshChart(){
-  buildChart('chartWrap', 7);
-  buildChart('chartWrap2', 14);
-}
-
-function buildChart(id, days){
+function renderChart(id, days){
   const wrap = document.getElementById(id);
   if(!wrap) return;
-  const visitors = getVisitors();
-  const keys = [];
-  const now = new Date();
+  const keys=[], now=new Date();
   for(let i=days-1;i>=0;i--){
-    const d = new Date(now);
-    d.setDate(d.getDate()-i);
+    const d=new Date(now); d.setDate(d.getDate()-i);
     keys.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
   }
-  const vals = keys.map(k=>visitors[k]||0);
-  const max  = Math.max(...vals,1);
-  const hasData = vals.some(v=>v>0);
-
+  const vals   = keys.map(k=>_visitors[k]||0);
+  const max    = Math.max(...vals,1);
+  const hasData= vals.some(v=>v>0);
   if(!hasData){
-    wrap.innerHTML = '<div class="chart-empty"><div class="big">&#128200;</div><div>No visit data yet. Open the temple site to start tracking.</div></div>';
+    wrap.innerHTML='<div class="chart-empty"><div class="big">&#128200;</div><div>No visit data yet. Share the temple site to start tracking.</div></div>';
     return;
   }
-  wrap.innerHTML = vals.map((v,i)=>`
+  wrap.innerHTML=vals.map((v,i)=>`
     <div class="bar-col">
       <div class="bar-val">${v||''}</div>
       <div class="bar" style="height:${Math.max((v/max)*100,4)}%" title="${v} visits on ${fmtDate(keys[i])}"></div>
@@ -599,145 +595,122 @@ function buildChart(id, days){
 }
 
 /* ── VISITOR PAGE ── */
-function refreshVisitorPage(){
-  const visitors = getVisitors();
-  const sorted = Object.entries(visitors).sort((a,b)=>b[0].localeCompare(a[0]));
-  const total = sorted.reduce((a,[,v])=>a+v,0);
-  const days  = sorted.length;
-  const peak  = sorted.reduce((a,[k,v])=>v>a[1]?[k,v]:a,['',0]);
-
-  if(document.getElementById('v-total')) document.getElementById('v-total').textContent=total.toLocaleString();
-  if(document.getElementById('v-today')) document.getElementById('v-today').textContent=(visitors[todayKey()]||0).toLocaleString();
-  if(document.getElementById('v-days'))  document.getElementById('v-days').textContent=days;
-  if(document.getElementById('v-peak'))  document.getElementById('v-peak').textContent=peak[1]?`${peak[1]} on ${fmtDate(peak[0])}`:'—';
-
-  const log = document.getElementById('visitLog');
+function renderVisitorPage(){
+  const sorted = Object.entries(_visitors).sort((a,b)=>b[0].localeCompare(a[0]));
+  const total  = sorted.reduce((a,[,v])=>a+v,0);
+  const peak   = sorted.reduce((a,[k,v])=>v>a[1]?[k,v]:a,['',0]);
+  setText('v-days', sorted.length);
+  setText('v-peak', peak[1]?`${peak[1]} on ${fmtDate(peak[0])}`:'—');
+  const log=document.getElementById('visitLog');
   if(log){
-    if(!sorted.length){
-      log.innerHTML='<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:2rem;">No visits recorded yet.</div>';
-    } else {
-      log.innerHTML=sorted.map(([k,v])=>`
+    log.innerHTML=!sorted.length
+      ?'<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:2rem;">No visits recorded yet.</div>'
+      :sorted.map(([k,v])=>`
         <div class="log-item">
-          <span class="log-date">${fmtDate(k)} &nbsp;<span style="color:rgba(255,255,255,.2);font-size:.65rem;">${k}</span></span>
+          <span class="log-date">${fmtDate(k)} <span style="color:rgba(255,255,255,.2);font-size:.65rem;">${k}</span></span>
           <span class="log-count">${v} visit${v!==1?'s':''}</span>
-        </div>
-      `).join('');
-    }
+        </div>`).join('');
   }
 }
 
-function resetVisitors(){
+async function resetVisitors(){
   if(!confirm('Reset all visitor data? This cannot be undone.')) return;
-  localStorage.removeItem(STORAGE_VISITORS);
-  refreshAll();
+  await apiDel('/api/visitors');
+  _visitors={};
+  await refreshAll();
   toast('Visitor data cleared','success');
 }
 
 /* ── PHOTO UPLOAD ── */
 function setupUpload(){
-  const zone  = document.getElementById('uploadZone');
-  const input = document.getElementById('fileInput');
-
+  const zone=document.getElementById('uploadZone');
+  const input=document.getElementById('fileInput');
   input.addEventListener('change', e=>handleFiles(e.target.files));
-
   zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag'); });
   zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
-  zone.addEventListener('drop', e=>{
-    e.preventDefault(); zone.classList.remove('drag');
-    handleFiles(e.dataTransfer.files);
-  });
+  zone.addEventListener('drop', e=>{ e.preventDefault(); zone.classList.remove('drag'); handleFiles(e.dataTransfer.files); });
 }
 
-function handleFiles(files){
+async function handleFiles(files){
   if(!files.length) return;
-  const arr = Array.from(files).filter(f=>f.type.startsWith('image/'));
+  const arr=Array.from(files).filter(f=>f.type.startsWith('image/'));
   if(!arr.length){ toast('Please select image files only','error'); return; }
 
-  const prog = document.getElementById('uploadProgress');
-  const bar  = document.getElementById('uploadBar');
+  const prog=document.getElementById('uploadProgress');
+  const bar=document.getElementById('uploadBar');
   prog.style.display='block'; bar.style.width='0%';
 
   let done=0;
-  arr.forEach(file=>{
-    const reader = new FileReader();
-    reader.onload = e=>{
-      const photos = getPhotos();
-      photos.unshift({ id:Date.now()+Math.random(), src:e.target.result, name:file.name, date:new Date().toISOString() });
-      savePhotos(photos);
-      done++;
-      bar.style.width = (done/arr.length*100)+'%';
-      if(done===arr.length){
-        setTimeout(()=>{ prog.style.display='none'; bar.style.width='0%'; },600);
-        refreshAll();
-        toast(`${done} photo${done>1?'s':''} uploaded successfully`,'success');
-        document.getElementById('fileInput').value='';
-      }
-    };
-    reader.readAsDataURL(file);
-  });
+  for(const file of arr){
+    const src = await readFile(file);
+    await apiPost('/api/photos', { src, name: file.name });
+    done++;
+    bar.style.width=(done/arr.length*100)+'%';
+  }
+  setTimeout(()=>{ prog.style.display='none'; bar.style.width='0%'; },600);
+  document.getElementById('fileInput').value='';
+  await refreshAll();
+  toast(`${done} photo${done>1?'s':''} uploaded successfully`,'success');
+}
+
+function readFile(file){
+  return new Promise(res=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.readAsDataURL(file); });
 }
 
 /* ── PHOTO GRID ── */
-function refreshPhotosGrid(){
-  const photos = getPhotos();
-  const grid   = document.getElementById('photosGrid');
-  const count  = document.getElementById('photosCount');
+function renderPhotosGrid(){
+  const grid=document.getElementById('photosGrid');
+  const count=document.getElementById('photosCount');
   if(!grid) return;
-  count.textContent = photos.length+' photo'+(photos.length!==1?'s':'');
-  if(!photos.length){
-    grid.innerHTML='<div class="empty-photos"><div class="big">&#128444;&#65039;</div><div>No photos yet. Upload some above!</div></div>';
-    return;
-  }
-  grid.innerHTML = photos.map(p=>`
-    <div class="photo-item">
-      <img src="${p.src}" alt="${p.name}" loading="lazy"/>
-      <div class="photo-over">
-        <button class="photo-btn pb-view" onclick="openLightbox('${p.id}')" title="View">&#128065;</button>
-        <button class="photo-btn pb-del"  onclick="deletePhoto('${p.id}')" title="Delete">&#128465;</button>
-      </div>
-      <div class="photo-date">${new Date(p.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
-    </div>
-  `).join('');
+  count.textContent=_photos.length+' photo'+(_photos.length!==1?'s':'');
+  grid.innerHTML=!_photos.length
+    ?'<div class="empty-photos"><div class="big">&#128444;&#65039;</div><div>No photos yet. Upload some above!</div></div>'
+    :_photos.map(p=>`
+      <div class="photo-item">
+        <img src="${p.src}" alt="${p.name}" loading="lazy"/>
+        <div class="photo-over">
+          <button class="photo-btn pb-view" onclick="openLightbox('${p.id}')" title="View">&#128065;</button>
+          <button class="photo-btn pb-del"  onclick="deletePhoto('${p.id}')" title="Delete">&#128465;</button>
+        </div>
+        <div class="photo-date">${new Date(p.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
+      </div>`).join('');
 }
 
-function refreshRecentGrid(){
-  const photos = getPhotos().slice(0,6);
-  const grid   = document.getElementById('recentGrid');
+function renderRecentGrid(){
+  const grid=document.getElementById('recentGrid');
   if(!grid) return;
-  if(!photos.length){
-    grid.innerHTML='<div style="color:var(--muted);font-size:.8rem;padding:1.5rem;grid-column:1/-1;">No photos uploaded yet.</div>';
-    return;
-  }
-  grid.innerHTML = photos.map(p=>`
-    <div class="photo-item" onclick="openLightbox('${p.id}')">
-      <img src="${p.src}" alt="${p.name}" loading="lazy"/>
-      <div class="photo-date">${new Date(p.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
-    </div>
-  `).join('');
+  const photos=_photos.slice(0,6);
+  grid.innerHTML=!photos.length
+    ?'<div style="color:var(--muted);font-size:.8rem;padding:1.5rem;grid-column:1/-1;">No photos uploaded yet.</div>'
+    :photos.map(p=>`
+      <div class="photo-item" onclick="openLightbox('${p.id}')">
+        <img src="${p.src}" alt="${p.name}" loading="lazy"/>
+        <div class="photo-date">${new Date(p.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
+      </div>`).join('');
 }
 
-function deletePhoto(id){
+async function deletePhoto(id){
   if(!confirm('Delete this photo?')) return;
-  savePhotos(getPhotos().filter(p=>String(p.id)!==String(id)));
-  refreshAll();
+  await apiDel('/api/photos/'+id);
+  await refreshAll();
   toast('Photo deleted','success');
 }
 
-function clearPhotos(){
+async function clearPhotos(){
   if(!confirm('Delete ALL photos? This cannot be undone.')) return;
-  savePhotos([]);
-  refreshAll();
+  await apiDel('/api/photos');
+  await refreshAll();
   toast('All photos cleared','success');
 }
 
 function updateBadge(){
   const b=document.getElementById('photoBadge');
-  if(b) b.textContent=getPhotos().length;
+  if(b) b.textContent=_photos.length;
 }
 
 /* ── LIGHTBOX ── */
 function openLightbox(id){
-  const p = getPhotos().find(x=>String(x.id)===String(id));
+  const p=_photos.find(x=>String(x.id)===String(id));
   if(!p) return;
   document.getElementById('lbImg').src=p.src;
   document.getElementById('lightbox').classList.add('open');
