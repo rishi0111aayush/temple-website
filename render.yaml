@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: temple-website
+    runtime: static
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
