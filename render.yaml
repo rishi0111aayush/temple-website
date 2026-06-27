@@ -1,6 +1,6 @@
 services:
   - type: web
     name: temple-website
-    runtime: static
+    env: static
     staticPublishPath: .
-    pullRequestPreviewsEnabled: false
+    buildCommand: ""
