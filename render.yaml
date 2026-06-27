@@ -2,5 +2,5 @@ services:
   - type: web
     name: temple-website
     env: static
-    staticPublishPath: .
+    staticPublishPath: public
     buildCommand: ""
